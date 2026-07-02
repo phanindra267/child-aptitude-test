@@ -1,0 +1,15 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt || echo "No requirements.txt found, skipping..."
+# Some services might rely on the root requirements.txt if they don't have their own.
+# We'll also copy the parent directory requirements.txt if needed.
+
+COPY . .
+
+# Default to uvicorn, but Flask apps will need different commands if not using uvicorn.
+# We'll set the command in docker-compose.yml or use a generic start script.
+# For now, let's just use a simple python execution if there's a main.py
+CMD ["python", "main.py"]
