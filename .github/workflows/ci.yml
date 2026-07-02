@@ -27,10 +27,20 @@ jobs:
         cd server
         npm ci
 
-    - name: Run Server Tests
+    - name: Run Server Smoke Check
       run: |
         cd server
         npm test
+
+    - name: Install dependencies (Client)
+      run: |
+        cd client
+        npm ci
+
+    - name: Build Client
+      run: |
+        cd client
+        npm run build
 
     - name: Install dependencies (Services)
       run: |
@@ -39,11 +49,11 @@ jobs:
 
     - name: Run Python Security Linting
       run: |
-        bandit -r services/
+        bandit -r services/ -q
 
     - name: Run Python Tests
       run: |
-        pytest services/
+        pytest services/ -q
 
   docker-build:
     needs: lint-and-test
